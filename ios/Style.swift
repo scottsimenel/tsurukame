@@ -150,9 +150,13 @@ class TKMStyle: NSObject {
   }
 
   // The size of a subject on the review screen: its base size scaled by the font size setting, and
-  // larger on iPad. Other screens that show a subject large don't go bigger than this.
-  class func reviewSubjectFontSize(baseSize: CGFloat = 60) -> CGFloat {
-    let idiomScale: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 2.5 : 1
+  // larger on iPad and regular-width displays. Other screens that show a subject large don't go
+  // bigger than this.
+  class func reviewSubjectFontSize(baseSize: CGFloat = 60,
+                                   traitCollection: UITraitCollection? = nil) -> CGFloat {
+    let isRegular = (traitCollection?.horizontalSizeClass == .regular) ||
+      (UIDevice.current.userInterfaceIdiom == .pad)
+    let idiomScale: CGFloat = isRegular ? 2.5 : 1
     return baseSize * idiomScale * CGFloat(Settings.fontSize)
   }
 

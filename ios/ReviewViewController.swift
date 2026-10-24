@@ -1261,7 +1261,8 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
   }
 
   func questionLabelFontSize() -> CGFloat {
-    TKMStyle.reviewSubjectFontSize(baseSize: CGFloat(defaultFontSize))
+    TKMStyle.reviewSubjectFontSize(baseSize: CGFloat(defaultFontSize),
+                                   traitCollection: traitCollection)
   }
 
   @objc func toggleFont() {
@@ -1565,8 +1566,10 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
     let dialogMessage = isAnkiModeActiveForCurrentTask ? nil :
       "Don't cheat!  Only use this if you promise you knew the correct answer."
 
-    // Use custom bottom sheet on iPhone, standard action sheet on iPad
-    if traitCollection.userInterfaceIdiom == .pad {
+    // Use custom bottom sheet on compact phone, standard action sheet on iPad and regular-width
+    // displays
+    if traitCollection.userInterfaceIdiom == .pad || traitCollection
+      .horizontalSizeClass == .regular {
       let c = UIAlertController(title: dialogTitle, message: dialogMessage,
                                 preferredStyle: .actionSheet)
       c.popoverPresentationController?.sourceView = addSynonymButton

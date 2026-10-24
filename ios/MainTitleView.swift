@@ -57,20 +57,26 @@ class MainTitleView: UIView {
 
     backgroundColor = .clear
 
-    // Make the layout fit better on iPad.
-    if UIDevice.current.userInterfaceIdiom == .pad {
-      stackView.axis = .horizontal
-      stackView.spacing = 12
-      stackView.distribution = .fill
-      bottomConstraint.constant = 6
-      setNeedsLayout()
-    }
+    updateLayoutForSizeClass()
   }
 
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
     imageContainer.layer.borderColor = TKMStyle.Color.cellBackground
       .resolvedColor(with: traitCollection).cgColor
+    if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
+      updateLayoutForSizeClass()
+    }
+  }
+
+  private func updateLayoutForSizeClass() {
+    let isRegular = traitCollection.horizontalSizeClass == .regular ||
+      UIDevice.current.userInterfaceIdiom == .pad
+    stackView.axis = isRegular ? .horizontal : .vertical
+    stackView.spacing = isRegular ? 12 : 0
+    stackView.distribution = isRegular ? .fill : .fillEqually
+    bottomConstraint.constant = isRegular ? 6 : 0
+    setNeedsLayout()
   }
 
   func update(username: String,

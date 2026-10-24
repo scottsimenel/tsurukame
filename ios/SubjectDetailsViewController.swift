@@ -103,7 +103,8 @@ class SubjectDetailsViewController: UIViewController, SubjectDelegate, TKMViewCo
     waves.radius = 36
 
     // Subjects keep the app's Japanese font, no bigger than on the review screen.
-    let titleSize = TKMStyle.reviewSubjectFontSize() * (isFullScreen ? 0.8 : 1)
+    let titleSize = TKMStyle
+      .reviewSubjectFontSize(traitCollection: traitCollection) * (isFullScreen ? 0.8 : 1)
     subjectTitle.font = UIFont(name: TKMStyle.japaneseFontName, size: titleSize)
     subjectTitle.attributedText = japaneseText(subject, imageSize: titleSize * 0.85)
     subjectTitle.adjustsFontSizeToFitWidth = true
