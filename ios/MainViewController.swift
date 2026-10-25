@@ -101,6 +101,7 @@ class MainViewController: UIViewController, LoginViewControllerDelegate,
   }
 
   private func updateGradientColors() {
+    guard headerGradient != nil else { return }
     // The header sits on plain paper; the gradient view is kept so the layout doesn't change.
     let paper = TKMStyle.Color.background.resolvedColor(with: traitCollection).cgColor
     headerGradient.colors = [paper, paper]
