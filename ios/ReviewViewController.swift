@@ -1568,8 +1568,9 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
 
     // Use custom bottom sheet on compact phone, standard action sheet on iPad and regular-width
     // displays
-    if traitCollection.userInterfaceIdiom == .pad || traitCollection
-      .horizontalSizeClass == .regular {
+    if traitCollection.userInterfaceIdiom == .pad ||
+      (traitCollection.horizontalSizeClass == .regular &&
+        traitCollection.verticalSizeClass != .compact) {
       let c = UIAlertController(title: dialogTitle, message: dialogMessage,
                                 preferredStyle: .actionSheet)
       c.popoverPresentationController?.sourceView = addSynonymButton

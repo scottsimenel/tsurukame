@@ -154,7 +154,8 @@ class TKMStyle: NSObject {
   // bigger than this.
   class func reviewSubjectFontSize(baseSize: CGFloat = 60,
                                    traitCollection: UITraitCollection? = nil) -> CGFloat {
-    let isRegular = (traitCollection?.horizontalSizeClass == .regular) ||
+    let isRegular = (traitCollection?.horizontalSizeClass == .regular &&
+      traitCollection?.verticalSizeClass != .compact) ||
       (UIDevice.current.userInterfaceIdiom == .pad)
     let idiomScale: CGFloat = isRegular ? 2.5 : 1
     return baseSize * idiomScale * CGFloat(Settings.fontSize)
