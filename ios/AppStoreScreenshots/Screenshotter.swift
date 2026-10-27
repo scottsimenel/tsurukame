@@ -39,7 +39,8 @@ import WaniKaniAPI
   @objc(TKMScreenshotter)
   @objcMembers
   class Screenshotter: NSObject {
-    static let isActive: Bool = UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT")
+    static let isActive: Bool = UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") ||
+      Settings.userApiToken == "dummy"
 
     class func setUp() {
       if isActive {
@@ -535,8 +536,8 @@ import WaniKaniAPI
         }
         component_subject_ids: [923, 578, 689]
         vocabulary {
-          meaning_explanation: "\\"When it comes to <kanji>somebody</kanji> like my<kanji>self</kanji>... aka <kanji>I</kanji>...\\" When you say this you're really saying \\"<vocabulary>personally</vocabulary>\\" or \\"<vocabulary>as for me</vocabulary>.\\""
-          reading_explanation: "The readings are a bit weird here. The <ja>私</ja> is <ja>わたし</ja> and the rest is on'yomi kanji readings. So, it's a mix of both, I'm afraid. \\"When it comes to me, I like mixing up on'yomi and kun'yomi because I hate myself.\\""
+          meaning_explanation: "When it comes to <kanji>somebody</kanji> like my<kanji>self</kanji>... aka <kanji>I</kanji>... When you say this you're really saying <vocabulary>personally</vocabulary> or <vocabulary>as for me</vocabulary>."
+          reading_explanation: "The readings are a bit weird here. The <ja>私</ja> is <ja>わたし</ja> and the rest is on'yomi kanji readings. So, it's a mix of both, I'm afraid. When it comes to me, I like mixing up on'yomi and kun'yomi because I hate myself."
           sentences {
             japanese: "私自身は、その動物園の問題にはあまり関心がないんです。"
             english: "Personally, I'm indifferent to the zoo's issues."
@@ -550,7 +551,6 @@ import WaniKaniAPI
             english: "You’re way off base if you think you know me better than I know myself."
           }
           parts_of_speech: [PRONOUN]
-          audio_ids: [41385, 41377, 6643, 29636]
         }
       """,
 
@@ -1260,9 +1260,21 @@ import WaniKaniAPI
 
     override func getSubject(id: Int64) -> TKMSubject? {
       if let textProto = subjectTextProtos[id] {
-        return try! TKMSubject(textFormatString: textProto)
+        do {
+          return try TKMSubject(textFormatString: textProto)
+        } catch {
+          NSLog("Error parsing subject %lld: %@", id, String(describing: error))
+          return nil
+        }
       }
       return nil
+    }
+
+    override func levelOf(subjectId: Int64) -> Int? {
+      guard let s = getSubject(id: subjectId) else {
+        return nil
+      }
+      return s.hasLevel ? Int(s.level) : 1
     }
 
     override func getAllAssignments() -> [TKMAssignment] {

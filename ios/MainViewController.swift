@@ -386,10 +386,6 @@ class MainViewController: UIViewController, LoginViewControllerDelegate,
   }
 
   func loginAgain() {
-    guard services.localCachingClient.getUserInfo() != nil else {
-      return
-    }
-
     let vc = StoryboardScene.Login.initialScene.instantiate()
     vc.delegate = self
     if !Settings.userEmailAddress.isEmpty {
