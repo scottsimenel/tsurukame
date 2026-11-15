@@ -103,7 +103,7 @@ class MainViewController: UIViewController, LoginViewControllerDelegate,
   private func updateGradientColors() {
     // The header sits on plain paper; the gradient view is kept so the layout doesn't change.
     let paper = TKMStyle.Color.background.resolvedColor(with: traitCollection).cgColor
-    headerGradient.colors = [paper, paper]
+    headerGradient?.colors = [paper, paper]
   }
 
   private func scheduleTableModelUpdate() {
@@ -176,7 +176,8 @@ class MainViewController: UIViewController, LoginViewControllerDelegate,
     .default
   }
 
-  override func traitCollectionDidChange(_: UITraitCollection?) {
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
     updateGradientColors()
   }
 

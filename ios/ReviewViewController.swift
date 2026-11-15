@@ -597,6 +597,10 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
         .preferredContentSizeCategory {
         resizeViewsForFontSize()
       }
+      if previousTraitCollection.isRegularWidthDisplay != traitCollection.isRegularWidthDisplay,
+         currentFontName != nil {
+        questionLabel.font = UIFont(name: currentFontName, size: questionLabelFontSize())
+      }
     }
   }
 
@@ -1282,7 +1286,8 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
   }
 
   func questionLabelFontSize() -> CGFloat {
-    TKMStyle.reviewSubjectFontSize(baseSize: CGFloat(defaultFontSize))
+    TKMStyle.reviewSubjectFontSize(baseSize: CGFloat(defaultFontSize),
+                                   traitCollection: traitCollection)
   }
 
   @objc func toggleFont() {
@@ -1588,8 +1593,9 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
     let dialogMessage = isAnkiModeActiveForCurrentTask ? nil :
       "Don't cheat!  Only use this if you promise you knew the correct answer."
 
-    // Use custom bottom sheet on iPhone, standard action sheet on iPad
-    if traitCollection.userInterfaceIdiom == .pad {
+    // Use custom bottom sheet on compact phone, standard action sheet on iPad and regular-width
+    // displays
+    if traitCollection.isRegularWidthDisplay {
       let c = UIAlertController(title: dialogTitle, message: dialogMessage,
                                 preferredStyle: .actionSheet)
       if let popover = c.popoverPresentationController {
