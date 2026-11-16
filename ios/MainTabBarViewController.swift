@@ -26,6 +26,10 @@ class MainTabBarViewController: UITabBarController {
   }
 
   override func viewDidLoad() {
+    if #available(iOS 18.0, *) {
+      mode = .tabBar
+    }
+
     if !FeatureFlags.showOtherPracticeModes {
       tabBar.isHidden = true
     }
@@ -45,6 +49,12 @@ class MainTabBarViewController: UITabBarController {
         break
       }
     }
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    let windowMidX = (view.window?.bounds.midX) ?? view.bounds.midX
+    tabBar.center.x = view.convert(CGPoint(x: windowMidX, y: 0), from: nil).x
   }
 
   func update() {
