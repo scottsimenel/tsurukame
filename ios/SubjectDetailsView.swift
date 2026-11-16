@@ -113,6 +113,11 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
   required init?(coder: NSCoder) {
     super.init(coder: coder)
 
+    insetsContentViewsToSafeArea = false
+    insetsLayoutMarginsFromSafeArea = false
+    cellLayoutMarginsFollowReadableWidth = false
+    directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+
     let scaledSectionHeaderHeight = UIFontMetrics.default.scaledValue(for: kSectionHeaderHeight)
 
     sectionHeaderHeight = scaledSectionHeaderHeight
@@ -142,6 +147,10 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
     self.services = services
     subjectDelegate = delegate
     backgroundColor = TKMStyle.Color.background
+    insetsContentViewsToSafeArea = false
+    insetsLayoutMarginsFromSafeArea = false
+    cellLayoutMarginsFollowReadableWidth = false
+    directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
   }
 
   public func saveStudyMaterials() {

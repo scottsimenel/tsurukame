@@ -239,6 +239,7 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
   private let headerTrack = UIView()
   private let headerFill = UIView()
   private var headerFillWidth: NSLayoutConstraint!
+  private var headerProgressFraction: CGFloat = 0
   // Level and SRS stage chips at the bottom of the subject.
   private let levelChip = PillLabel()
   private let srsChip = PillLabel()
@@ -504,8 +505,10 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
       header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 4),
       // Fixed so the subject below can't stretch it.
       header.heightAnchor.constraint(equalToConstant: 48),
-      header.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-      header.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+      header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                      constant: 16),
+      header.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                       constant: -16),
       closeButton.widthAnchor.constraint(equalToConstant: 44),
       closeButton.heightAnchor.constraint(equalToConstant: 44),
       settingsButton.widthAnchor.constraint(equalToConstant: 44),
@@ -530,8 +533,8 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
     headerAccuracyLabel.accessibilityLabel = session.successRateText + " correct so far"
 
     view.layoutIfNeeded()
-    let fraction = total == 0 ? 0 : CGFloat(completed) / CGFloat(total)
-    headerFillWidth.constant = headerTrack.bounds.width * fraction
+    headerProgressFraction = total == 0 ? 0 : CGFloat(completed) / CGFloat(total)
+    headerFillWidth.constant = headerTrack.bounds.width * headerProgressFraction
     UIView.animate(withDuration: animationDuration) { self.headerTrack.layoutIfNeeded() }
   }
 
@@ -627,6 +630,8 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
+
+    headerFillWidth?.constant = headerTrack.bounds.width * headerProgressFraction
 
     // Fix the extra inset at the top of the subject details view. This isn't necessary after iOS
     // 15.
