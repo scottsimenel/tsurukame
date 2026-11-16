@@ -166,8 +166,9 @@ class SubjectDetailsViewController: UIViewController, SubjectDelegate, TKMViewCo
       waves.bottomAnchor.constraint(equalTo: hero.bottomAnchor),
       waves.heightAnchor.constraint(equalToConstant: 110),
       info.topAnchor.constraint(equalTo: subjectTitle.bottomAnchor, constant: 4),
-      info.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-      info.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+      info.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+      info.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                                     constant: -24),
       subjectDetailsView.topAnchor.constraint(equalTo: hero.bottomAnchor, constant: 4),
     ])
   }
