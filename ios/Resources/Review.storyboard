@@ -271,6 +271,7 @@
                         <outlet property="revealAnswerButton" destination="Zyq-WW-fbd" id="5WQ-60-SBe"/>
                         <outlet property="subjectDetailsView" destination="wFr-RK-iSqq" id="o6J-AO-Aii"/>
                         <outlet property="submitButton" destination="ctF-hm-AxT" id="x0c-jE-ztx"/>
+                        <outlet property="submitButtonTrailingConstraint" destination="s4d-2D-nAL" id="s4d-2D-out"/>
                         <outlet property="successRateIcon" destination="9gS-sh-cYw" id="GEi-xa-MAB"/>
                         <outlet property="successRateIconWidthConstraint" destination="G25-7k-Q2z" id="gQC-pI-AKg"/>
                         <outlet property="successRateLabel" destination="S3x-ei-BlA" id="3gf-jQ-C32"/>

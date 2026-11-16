@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import AVFoundation
 import Foundation
 import WaniKaniAPI
 
@@ -256,6 +257,7 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
   @IBOutlet private var promptLabel: UILabel!
   @IBOutlet private var answerField: AnswerTextField!
   @IBOutlet private var submitButton: UIButton!
+  @IBOutlet private var submitButtonTrailingConstraint: NSLayoutConstraint!
   @IBOutlet private var addSynonymButton: UIButton!
   @IBOutlet private var revealAnswerButton: UIButton!
   @IBOutlet private var progressBar: UIProgressView!
@@ -377,6 +379,15 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
     }
     nd.add(name: UIResponder.keyboardWillHideNotification) { [weak self] _ in
       self?.keyboardWillHide()
+    }
+    nd.add(name: AVAudioSession.silenceSecondaryAudioHintNotification) { [weak self] _ in
+      DispatchQueue.main.async { self?.updateSubmitButtonOffset(animated: true) }
+    }
+    nd.add(name: AVAudioSession.interruptionNotification) { [weak self] _ in
+      DispatchQueue.main.async { self?.updateSubmitButtonOffset(animated: true) }
+    }
+    nd.add(name: UIApplication.didBecomeActiveNotification) { [weak self] _ in
+      DispatchQueue.main.async { self?.updateSubmitButtonOffset(animated: true) }
     }
 
     subjectDetailsView.setup(services: services, delegate: self)
@@ -628,10 +639,45 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
       UIFontMetrics(forTextStyle: .title2).scaledValue(for: 64.0)
   }
 
+  private var sideRailInset: CGFloat {
+    let windowInset = view.window?.safeAreaInsets.right ?? 0
+    return max(windowInset, view.safeAreaInsets.right)
+  }
+
+  private var isSideRailContentBlocking: Bool {
+    guard sideRailInset > 24 else { return false }
+    let session = AVAudioSession.sharedInstance()
+    return session.isOtherAudioPlaying || session.secondaryAudioShouldBeSilencedHint
+  }
+
+  private func updateSubmitButtonOffset(subjectDetailsShown: Bool? = nil, animated: Bool = false) {
+    guard let constraint = submitButtonTrailingConstraint else { return }
+    let isShown = subjectDetailsShown ?? !subjectDetailsView.isHidden
+    let targetConstant: CGFloat
+    if isShown && isSideRailContentBlocking {
+      targetConstant = 12.0 + sideRailInset
+    } else {
+      targetConstant = 24.0
+    }
+    guard constraint.constant != targetConstant else { return }
+    constraint.constant = targetConstant
+    if animated {
+      UIView.animate(withDuration: 0.25) {
+        self.view.layoutIfNeeded()
+      }
+    }
+  }
+
+  override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    updateSubmitButtonOffset(animated: false)
+  }
+
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
 
     headerFillWidth?.constant = headerTrack.bounds.width * headerProgressFraction
+    updateSubmitButtonOffset(animated: false)
 
     // Fix the extra inset at the top of the subject details view. This isn't necessary after iOS
     // 15.
@@ -650,6 +696,7 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
     }
 
     super.viewWillAppear(animated)
+    updateSubmitButtonOffset(animated: false)
     SiriShortcutHelper.shared
       .attachShortcutActivity(self, type: .reviews)
     navigationController?.setNavigationBarHidden(true, animated: false)
@@ -1093,6 +1140,7 @@ class ReviewViewController: UIViewController, UITextFieldDelegate, SubjectDelega
       answerFieldToBottomConstraint.constant = keyboardInsetHeight
     }
     updateChipsInset(subjectDetailsShown: shown)
+    updateSubmitButtonOffset(subjectDetailsShown: shown)
 
     // Enable/disable the answer field, and set its first responder status.
     // This makes the keyboard appear or disappear immediately.  We need this animation to happen

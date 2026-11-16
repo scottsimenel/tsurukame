@@ -69,8 +69,25 @@ class BasicModelItem: TableModelItem {
 class BasicModelCell: TableModelCell {
   @TypedModelItem var item: BasicModelItem
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    guard (baseItem as? BasicModelItem)?.style == .value1,
+          accessoryType == .none,
+          accessoryView == nil,
+          tableView?.insetsContentViewsToSafeArea == false,
+          let detailTextLabel = detailTextLabel,
+          !detailTextLabel.isHidden else { return }
+    let rightMargin: CGFloat = 16.0
+    let targetX = contentView.bounds.width - rightMargin - detailTextLabel.frame.width
+    let minAllowedX = (textLabel?.frame.maxX ?? 0) + 8.0
+    detailTextLabel.frame.origin.x = max(minAllowedX, targetX)
+  }
+
   override func update() {
     selectionStyle = .none
+    let insetFromSafeArea = tableView?.insetsLayoutMarginsFromSafeArea ?? true
+    insetsLayoutMarginsFromSafeArea = insetFromSafeArea
+    contentView.insetsLayoutMarginsFromSafeArea = insetFromSafeArea
 
     textLabel?.text = item.title
     textLabel?.font = item.titleFont

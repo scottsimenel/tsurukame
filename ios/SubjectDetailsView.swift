@@ -147,10 +147,6 @@ class SubjectDetailsView: UITableView, SubjectChipDelegate {
     self.services = services
     subjectDelegate = delegate
     backgroundColor = TKMStyle.Color.background
-    insetsContentViewsToSafeArea = false
-    insetsLayoutMarginsFromSafeArea = false
-    cellLayoutMarginsFollowReadableWidth = false
-    directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
   }
 
   public func saveStudyMaterials() {
