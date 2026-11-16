@@ -152,6 +152,7 @@ class LessonPickerViewController: UIViewController, UICollectionViewDataSource,
                                            heightDimension: .absolute(kTileHeight + kTileSpacing))
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
     let section = NSCollectionLayoutSection(group: group)
+    section.contentInsetsReference = .safeArea
     section.contentInsets = .init(top: 0, leading: 16 - halfSpacing, bottom: 14 - halfSpacing,
                                   trailing: 16 - halfSpacing)
     let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -380,10 +381,11 @@ private class LessonPickerBottomBar: UIView {
       border.trailingAnchor.constraint(equalTo: trailingAnchor),
       border.heightAnchor.constraint(equalToConstant: 1),
       startButton.topAnchor.constraint(equalTo: topAnchor, constant: 14),
-      startButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      startButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                            constant: -16),
       startButton.heightAnchor.constraint(equalToConstant: 54),
       startButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-      countLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+      countLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
       countLabel.trailingAnchor.constraint(lessThanOrEqualTo: startButton.leadingAnchor,
                                            constant: -12),
       countLabel.centerYAnchor.constraint(equalTo: startButton.centerYAnchor),

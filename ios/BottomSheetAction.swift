@@ -116,8 +116,9 @@ class BottomSheetViewController: UIViewController {
 
     NSLayoutConstraint.activate([
       stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-      stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-      stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+      stackView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor),
+      stackView.trailingAnchor
+        .constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor),
       stackView.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor,
                                         constant: -8),
     ])

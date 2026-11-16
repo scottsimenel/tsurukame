@@ -102,8 +102,8 @@ class BurnedReviewFiltersViewController: UIViewController, TKMViewController {
     // Constraints
     NSLayoutConstraint.activate([
       scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+      scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
       scrollView.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
       contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16),
@@ -389,12 +389,16 @@ class BurnedReviewFiltersViewController: UIViewController, TKMViewController {
 
     NSLayoutConstraint.activate([
       countLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 12),
-      countLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 16),
-      countLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
+      countLabel.leadingAnchor.constraint(equalTo: footerView.safeAreaLayoutGuide.leadingAnchor,
+                                          constant: 16),
+      countLabel.trailingAnchor.constraint(equalTo: footerView.safeAreaLayoutGuide.trailingAnchor,
+                                           constant: -16),
 
       startButton.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: 8),
-      startButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 16),
-      startButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
+      startButton.leadingAnchor.constraint(equalTo: footerView.safeAreaLayoutGuide.leadingAnchor,
+                                           constant: 16),
+      startButton.trailingAnchor.constraint(equalTo: footerView.safeAreaLayoutGuide.trailingAnchor,
+                                            constant: -16),
       startButton.heightAnchor.constraint(equalToConstant: 50),
       startButton.bottomAnchor.constraint(equalTo: footerView.safeAreaLayoutGuide.bottomAnchor,
                                           constant: -8),
